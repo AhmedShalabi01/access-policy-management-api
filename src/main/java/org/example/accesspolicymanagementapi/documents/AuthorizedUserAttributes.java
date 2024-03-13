@@ -1,9 +1,13 @@
 package org.example.accesspolicymanagementapi.documents;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.data.mongodb.core.index.Indexed;
 
 import java.util.List;
 
+@Data
+@AllArgsConstructor
 public class AuthorizedUserAttributes {
     @Indexed(unique = true)
     private String department;
