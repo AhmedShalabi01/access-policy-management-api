@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.accesspolicymanagementapi.documents.AuthorizedUserAttributes;
 
-import java.util.List;
 import java.util.Set;
 
 @Data
