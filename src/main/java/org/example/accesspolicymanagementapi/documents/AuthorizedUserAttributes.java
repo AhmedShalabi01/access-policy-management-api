@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class AuthorizedUserAttributes {
-    @Indexed(unique = true)
+    @Indexed
     private String department;
     private List<String> allowedRoles;
     private Integer minimumYearsOfExperience;
