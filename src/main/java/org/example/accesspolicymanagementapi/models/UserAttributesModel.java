@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class UserAttributesModel {
-    @NotEmpty(message = "The ID field Can not be blank")
+    @NotEmpty(message = "The department field Can not be blank")
     private String department;
     @NotEmpty(message = "The allowed roles can not be empty")
     private List<String> allowedRoles;
