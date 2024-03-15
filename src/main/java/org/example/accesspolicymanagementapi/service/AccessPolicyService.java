@@ -45,7 +45,7 @@ public class AccessPolicyService {
 
     public void createNewAccessPolicy(@Valid AccessPolicyModel accessPolicyModel) {
         AccessPointAttributesModel accessPointAttributesModel = accessPolicyExternalApiService.fetchAccessPoint(accessPolicyModel.getAccessPointAttributesModel().getLocation());
-        if (accessPolicyModel.getAccessPointAttributesModel().getOccupancyLevel() < accessPointAttributesModel.getOccupancyLevel()) {
+        if (accessPolicyModel.getAccessPointAttributesModel().getOccupancyLevel() <= accessPointAttributesModel.getOccupancyLevel()) {
             accessPolicyModel.setId(generateSequence(AccessPolicy.SEQUENCE_NAME));
             accessPolicyRepository.insert(accessPolicyMapper.toDocument(accessPolicyModel));
         } else {
