@@ -43,17 +43,14 @@ public class AccessPolicyService {
                 .collect(Collectors.toList());
     }
 
-    public void createNewAccessPolicy(@Valid AccessPolicyModel accessPolicyModel){
-        AccessPointAttributesModel accessPointAttributesModel = accessPolicyExternalApiService.fetchAccessPoint(accessPolicyModel.getAccessPointAttributesModel()
-                .getLocation());
-        if(accessPolicyModel.getAccessPointAttributesModel().getOccupancyLevel() < accessPointAttributesModel.getOccupancyLevel()){
+    public void createNewAccessPolicy(@Valid AccessPolicyModel accessPolicyModel) {
+        AccessPointAttributesModel accessPointAttributesModel = accessPolicyExternalApiService.fetchAccessPoint(accessPolicyModel.getAccessPointAttributesModel().getLocation());
+        if (accessPolicyModel.getAccessPointAttributesModel().getOccupancyLevel() < accessPointAttributesModel.getOccupancyLevel()) {
             accessPolicyModel.setId(generateSequence(AccessPolicy.SEQUENCE_NAME));
             accessPolicyRepository.insert(accessPolicyMapper.toDocument(accessPolicyModel));
-        }else{
+        } else {
             throw new ValidationException("The Occupancy Level Exceeds the maximum value");
         }
-
-
     }
 
     public void updateAccessPolicy(@Valid AccessPolicyModel accessPolicyModel, String accessPolicyId){
