@@ -7,6 +7,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface AccessPointAttributesMapper {
     AccessPointAttributesModel toModel(final AccessPointAttributes accessPointAttributes);
-
     AccessPointAttributes toDocument(final AccessPointAttributesModel accessPointAttributesModel);
 }
