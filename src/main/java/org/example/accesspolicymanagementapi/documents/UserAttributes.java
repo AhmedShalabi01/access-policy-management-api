@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class AuthorizedUserAttributes {
+public class UserAttributes {
     @Indexed
     private String department;
     private List<String> allowedRoles;

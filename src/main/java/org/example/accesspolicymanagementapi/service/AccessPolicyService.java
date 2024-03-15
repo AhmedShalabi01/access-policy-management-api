@@ -1,11 +1,14 @@
 package org.example.accesspolicymanagementapi.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.example.accesspolicymanagementapi.documents.AccessPolicy;
 import org.example.accesspolicymanagementapi.documents.DatabaseSequence;
 import org.example.accesspolicymanagementapi.mapper.AccessPolicyMapper;
+import org.example.accesspolicymanagementapi.models.AccessPointAttributesModel;
 import org.example.accesspolicymanagementapi.models.AccessPolicyModel;
 import org.example.accesspolicymanagementapi.repo.AccessPolicyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +34,8 @@ public class AccessPolicyService {
 
     private final AccessPolicyMapper accessPolicyMapper;
     private final AccessPolicyRepository accessPolicyRepository;
-
-    @Autowired
-    private MongoOperations mongoOperations;
+    private final AccessPolicyExternalApiService accessPolicyExternalApiService;
+    private final MongoOperations mongoOperations;
 
     public List<AccessPolicyModel> getAllAccessPolicies(){
 
@@ -44,13 +46,16 @@ public class AccessPolicyService {
     }
 
     public void createNewAccessPolicy(@Valid AccessPolicyModel accessPolicyModel){
+        AccessPointAttributesModel accessPointAttributesModel = accessPolicyExternalApiService.fetchAccessPoint(accessPolicyModel.getAccessPointAttributesModel()
+                .getLocation());
+        if(accessPolicyModel.getAccessPointAttributesModel().getOccupancyLevel() < accessPointAttributesModel.getOccupancyLevel()){
+            accessPolicyModel.setId(generateSequence(AccessPolicy.SEQUENCE_NAME));
+            accessPolicyRepository.insert(accessPolicyMapper.toDocument(accessPolicyModel));
+        }else{
+            throw new ValidationException("The Occupancy Level Exceeds the maximum value");
+        }
 
-        AccessPolicyModel tempAccessPolicyModel = new AccessPolicyModel();
-        tempAccessPolicyModel.setId(generateSequence(AccessPolicy.SEQUENCE_NAME));
-        tempAccessPolicyModel.setOccupancyLevel(accessPolicyModel.getOccupancyLevel());
-        tempAccessPolicyModel.setLocation(accessPolicyModel.getLocation());
-        tempAccessPolicyModel.setAuthorizedUserAttributes(accessPolicyModel.getAuthorizedUserAttributes());
-        accessPolicyRepository.insert(accessPolicyMapper.toDocument(tempAccessPolicyModel));
+
     }
 
     public void updateAccessPolicy(@Valid AccessPolicyModel accessPolicyModel, String accessPolicyId){

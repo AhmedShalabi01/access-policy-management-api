@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
@@ -19,9 +18,7 @@ public class AccessPolicy {
 
     @Id
     private String id;
-    @Indexed(unique = true)
-    private String location;
-    private Integer occupancyLevel;
-    private Boolean isTampered;
-    private Set<AuthorizedUserAttributes> authorizedUserAttributes;
+
+    private AccessPointAttributes accessPointAttributes;
+    private Set<UserAttributes> userAttributesSet;
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class AuthorizedUserAttributesModel {
+public class UserAttributesModel {
     @NotEmpty(message = "The ID field Can not be blank")
     private String department;
     @NotEmpty(message = "The allowed roles can not be empty")
