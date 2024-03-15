@@ -2,7 +2,6 @@ package org.example.accesspolicymanagementapi.exceptionhandler.responsebodies;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
 import lombok.Getter;
 import lombok.Setter;
