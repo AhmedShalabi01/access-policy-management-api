@@ -72,11 +72,11 @@ public class AccessPolicyService {
         accessPolicyRepository.deleteById(accessPolicyId);
     }
 
-//    public AccessPolicyModel findAccessPolicy(String location) {
-//        return accessPolicyMapper.toModel(accessPolicyRepository
-//                .findAccessPolicyByLocation(location)
-//                .orElseThrow(() -> new EntityNotFoundException("The Access Policy with location : (" + location + ") does not exist")));
-//    }
+    public AccessPolicyModel findAccessPolicy(String location) {
+        return accessPolicyMapper.toModel(accessPolicyRepository
+                .findByAccessPointAttributes_Location(location)
+                .orElseThrow(() -> new EntityNotFoundException("The Access Policy with location : (" + location + ") does not exist")));
+    }
 
     public String generateSequence(String seqName) {
         DatabaseSequence counter = mongoOperations.findAndModify(query(where("_id").is(seqName)),
