@@ -13,7 +13,7 @@ public class AccessPolicyExternalApiService {
 
     public AccessPolicyExternalApiService() {
         this.webClient = WebClient.builder()
-                .baseUrl("http://localhost:8083/access-points-attributes")
+                .baseUrl("http://localhost:8082/access-points-attributes")
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }
