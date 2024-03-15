@@ -2,15 +2,15 @@ package org.example.accesspolicymanagementapi.exceptionhandler;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
-import org.example.accesspolicymanagementapi.exceptionhandler.responsebodies.ConstraintViolationExceptionResponseBody;
-import org.example.accesspolicymanagementapi.exceptionhandler.responsebodies.DuplicateKeyExceptionResponseBody;
-import org.example.accesspolicymanagementapi.exceptionhandler.responsebodies.EntityNotFoundExceptionBody;
+import jakarta.validation.ValidationException;
+import org.example.accesspolicymanagementapi.exceptionhandler.responsebodies.*;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -44,6 +44,29 @@ public class GlobalExceptionHandler {
 
         EntityNotFoundExceptionBody body =
                 new EntityNotFoundExceptionBody(status, exception);
+
+        return new ResponseEntity<>(body,status);
+    }
+
+    @ExceptionHandler(WebClientResponseException.class)
+    public ResponseEntity<WebClientResponseExceptionBody>
+    handleWebClientResponseException(WebClientResponseException exception){
+
+        HttpStatusCode status = HttpStatus.BAD_REQUEST;
+
+        WebClientResponseExceptionBody body =
+                new WebClientResponseExceptionBody(exception.getResponseBodyAsString());
+
+        return new ResponseEntity<>(body,status);
+    }
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ValidationExceptionBody>
+    handleValidationException(ValidationException exception){
+
+        HttpStatusCode status = HttpStatus.BAD_REQUEST;
+
+        ValidationExceptionBody body =
+                new ValidationExceptionBody(status,exception);
 
         return new ResponseEntity<>(body,status);
     }
