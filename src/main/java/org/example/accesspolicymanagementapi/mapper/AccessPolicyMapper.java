@@ -10,11 +10,11 @@ import org.mapstruct.ReportingPolicy;
         uses = {UserAttributesMapper.class, AccessPointAttributesMapper.class})
 public interface AccessPolicyMapper {
 
-    @Mapping(source = "userAttributesSet", target="userAttributesModelSet")
+    @Mapping(source = "userAttributesSet", target="userAttributesSetModel")
     @Mapping(source = "accessPointAttributes", target="accessPointAttributesModel")
     AccessPolicyModel toModel(final AccessPolicy accessPolicy);
 
-    @Mapping(source = "userAttributesModelSet", target="userAttributesSet")
+    @Mapping(source = "userAttributesSetModel", target="userAttributesSet")
     @Mapping(source = "accessPointAttributesModel", target="accessPointAttributes")
     AccessPolicy toDocument(final AccessPolicyModel accessPolicyModel);
 }
