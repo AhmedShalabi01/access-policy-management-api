@@ -20,7 +20,7 @@ public class AccessPolicyExternalApiService {
 
     public AccessPointAttributesModel fetchAccessPoint(String location) {
         return webClient.get()
-                .uri("/findAccessPointAttributes/{location}", location )
+                .uri("/findAccessPointAttributesByLocation/{location}", location )
                 .retrieve()
                 .bodyToMono(AccessPointAttributesModel.class)
                 .block();
