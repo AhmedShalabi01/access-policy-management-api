@@ -1,7 +1,6 @@
 package org.example.accesspolicymanagementapi.service;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.example.accesspolicymanagementapi.mapper.AccessPolicyMapper;
 import org.example.accesspolicymanagementapi.models.AccessPointAttributesModel;
 import org.example.accesspolicymanagementapi.models.AccessPolicyModel;
 import org.example.accesspolicymanagementapi.repo.AccessPolicyRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
