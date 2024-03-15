@@ -8,7 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface AccessPolicyRepository extends MongoRepository<AccessPolicy,String> {
-
-    Optional<AccessPolicy> findAccessPolicyByLocation(String location);
-
+    Optional<AccessPolicy> findByAccessPointAttributes_Location(String department);
 }
