@@ -10,6 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Component
 public class AccessPolicyExternalApiService {
     private final WebClient webClient;
+
     public AccessPolicyExternalApiService() {
         this.webClient = WebClient.builder()
                 .baseUrl("http://localhost:8083/access-points-attributes")
@@ -20,7 +21,7 @@ public class AccessPolicyExternalApiService {
 
     public AccessPointAttributesModel fetchAccessPoint(String location) {
         return webClient.get()
-                .uri("/findAccessPointAttributesByLocation/{location}", location )
+                .uri("/findAccessPointAttributesByLocation/{location}", location)
                 .retrieve()
                 .bodyToMono(AccessPointAttributesModel.class)
                 .block();
