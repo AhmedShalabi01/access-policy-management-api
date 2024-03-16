@@ -9,6 +9,7 @@ import org.example.accesspolicymanagementapi.documents.DatabaseSequence;
 import org.example.accesspolicymanagementapi.mapper.AccessPolicyMapper;
 import org.example.accesspolicymanagementapi.models.AccessPointAttributesModel;
 import org.example.accesspolicymanagementapi.models.AccessPolicyModel;
+import org.example.accesspolicymanagementapi.models.UserAttributesModel;
 import org.example.accesspolicymanagementapi.repo.AccessPolicyRepository;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;
@@ -18,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
@@ -36,7 +38,6 @@ public class AccessPolicyService {
     private final MongoOperations mongoOperations;
 
     public List<AccessPolicyModel> getAllAccessPolicies(){
-
         return accessPolicyRepository.findAll()
                 .stream()
                 .map(accessPolicyMapper::toModel)
@@ -44,22 +45,20 @@ public class AccessPolicyService {
     }
 
     public void createNewAccessPolicy(@Valid AccessPolicyModel accessPolicyModel){
-        AccessPointAttributesModel accessPointAttributesModel = accessPolicyExternalApiService.fetchAccessPoint(accessPolicyModel.getAccessPointAttributesModel()
-                .getLocation());
-        if(accessPolicyModel.getAccessPointAttributesModel().getOccupancyLevel() < accessPointAttributesModel.getOccupancyLevel()){
-            accessPolicyModel.setId(generateSequence(AccessPolicy.SEQUENCE_NAME));
-            accessPolicyRepository.insert(accessPolicyMapper.toDocument(accessPolicyModel));
-        }else{
-            throw new ValidationException("The Occupancy Level Exceeds the maximum value");
-        }
 
-
+        checkDuplicateDepartments(accessPolicyModel.getUserAttributesSetModel());
+        checkOccupancyLevel(accessPolicyModel);
+        accessPolicyModel.setId(generateSequence(AccessPolicy.SEQUENCE_NAME));
+        accessPolicyRepository.insert(accessPolicyMapper.toDocument(accessPolicyModel));
     }
 
     public void updateAccessPolicy(@Valid AccessPolicyModel accessPolicyModel, String accessPolicyId){
         accessPolicyMapper.toModel(accessPolicyRepository
                 .findById(accessPolicyId)
                 .orElseThrow(() -> new EntityNotFoundException("The Access Policy with ID : (" + accessPolicyId + ") does not exist")));
+
+        checkDuplicateDepartments(accessPolicyModel.getUserAttributesSetModel());
+        checkOccupancyLevel(accessPolicyModel);
 
         accessPolicyRepository.save(accessPolicyMapper.toDocument(accessPolicyModel));
 
@@ -78,14 +77,32 @@ public class AccessPolicyService {
                 .orElseThrow(() -> new EntityNotFoundException("The Access Policy with location : (" + location + ") does not exist")));
     }
 
-    public String generateSequence(String seqName) {
+
+    private String generateSequence(String seqName) {
         DatabaseSequence counter = mongoOperations.findAndModify(query(where("_id").is(seqName)),
                 new Update().inc("seq",1), options().returnNew(true).upsert(true),
                 DatabaseSequence.class);
         return String.valueOf(!Objects.isNull(counter) ? counter.getSeq() : 1);
     }
 
+    private void checkDuplicateDepartments(Set<UserAttributesModel> userAttributesModelSet ) {
+        boolean hasDuplicates = userAttributesModelSet.stream()
+                .map(UserAttributesModel::getDepartment)
+                .distinct()
+                .count() != userAttributesModelSet.size();
+        if (hasDuplicates) {
+            throw new ValidationException("Duplicate department found in user attributes set");
+        }
+    }
 
+    private void checkOccupancyLevel(AccessPolicyModel accessPolicyModel) {
+        AccessPointAttributesModel accessPointAttributesModel = accessPolicyExternalApiService.fetchAccessPoint(accessPolicyModel.getAccessPointAttributesModel()
+                .getLocation());
+        if(accessPolicyModel.getAccessPointAttributesModel().getOccupancyLevel() > accessPointAttributesModel.getOccupancyLevel()) {
+            throw new ValidationException("The Occupancy Level Exceeds the maximum value");
+        }
+
+    }
 
 
 }
