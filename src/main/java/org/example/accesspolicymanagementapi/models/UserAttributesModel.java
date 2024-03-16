@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -14,12 +15,12 @@ public class UserAttributesModel {
     @NotEmpty(message = "The department field Can not be blank")
     private String department;
     @NotEmpty(message = "The allowed roles can not be empty")
-    private List<String> allowedRoles;
+    private Set<String> allowedRoles;
     @NotNull(message = "The minimum years of experience field Can not be blank")
     @Min(value = 1,message = "The minimum years of experience field Can not be blank")
     private Integer minimumYearsOfExperience;
     @NotEmpty(message = "The allowed clearance levels roles can not be empty")
-    private List<String> allowedClearanceLevels;
+    private Set<String> allowedClearanceLevels;
     @NotEmpty(message = "The allowed employment status can not be empty")
-    private List<String> allowedEmploymentStatus;
+    private Set<String> allowedEmploymentStatus;
 }

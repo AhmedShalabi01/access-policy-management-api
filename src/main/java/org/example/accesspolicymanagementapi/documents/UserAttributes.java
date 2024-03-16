@@ -4,15 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.mongodb.core.index.Indexed;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 public class UserAttributes {
     @Indexed
     private String department;
-    private List<String> allowedRoles;
+    private Set<String> allowedRoles;
     private Integer minimumYearsOfExperience;
-    private List<String> allowedClearanceLevels;
-    private List<String> allowedEmploymentStatus;
+    private Set<String> allowedClearanceLevels;
+    private Set<String> allowedEmploymentStatus;
 }
