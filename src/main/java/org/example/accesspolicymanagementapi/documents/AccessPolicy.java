@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
-@Document(collection = "AccessPolicies")
+@Document(collection = "accessPolicies")
 public class AccessPolicy {
     @Transient
     public static final String SEQUENCE_NAME = "access_policies_sequence";
