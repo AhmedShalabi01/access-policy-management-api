@@ -46,8 +46,11 @@ public class AccessPolicyService {
 
     public void createNewAccessPolicy(@Valid AccessPolicyModel accessPolicyModel){
 
+        AccessPointAttributesModel accessPointAttributesModel = accessPolicyExternalApiService.fetchAccessPoint(accessPolicyModel.getAccessPointAttributesModel()
+                .getLocation());
+
         checkDuplicateDepartments(accessPolicyModel.getUserAttributesSetModel());
-        checkOccupancyLevel(accessPolicyModel);
+        checkOccupancyLevel(accessPolicyModel,accessPointAttributesModel);
         accessPolicyModel.setId(generateSequence(AccessPolicy.SEQUENCE_NAME));
         accessPolicyRepository.insert(accessPolicyMapper.toDocument(accessPolicyModel));
     }
@@ -55,10 +58,12 @@ public class AccessPolicyService {
     public void updateAccessPolicy(@Valid AccessPolicyModel accessPolicyModel, String accessPolicyId){
         accessPolicyMapper.toModel(accessPolicyRepository
                 .findById(accessPolicyId)
-                .orElseThrow(() -> new EntityNotFoundException("The Access Policy with ID : (" + accessPolicyId + ") does not exist")));
+                .orElseThrow(() -> new EntityNotFoundException("The Access Policy with ID  (" + accessPolicyId + ") does not exist")));
 
+        AccessPointAttributesModel accessPointAttributesModel = accessPolicyExternalApiService.fetchAccessPoint(accessPolicyModel.getAccessPointAttributesModel()
+                .getLocation());
         checkDuplicateDepartments(accessPolicyModel.getUserAttributesSetModel());
-        checkOccupancyLevel(accessPolicyModel);
+        checkOccupancyLevel(accessPolicyModel,accessPointAttributesModel);
 
         accessPolicyRepository.save(accessPolicyMapper.toDocument(accessPolicyModel));
 
@@ -66,7 +71,7 @@ public class AccessPolicyService {
     public void deleteAccessPolicy(String accessPolicyId) {
         accessPolicyMapper.toModel(accessPolicyRepository
                 .findById(accessPolicyId)
-                .orElseThrow(() -> new EntityNotFoundException("The Access Policy with ID : (" + accessPolicyId + ") does not exist")));
+                .orElseThrow(() -> new EntityNotFoundException("The Access Policy with ID  (" + accessPolicyId + ") does not exist")));
 
         accessPolicyRepository.deleteById(accessPolicyId);
     }
@@ -74,7 +79,7 @@ public class AccessPolicyService {
     public AccessPolicyModel findAccessPolicy(String location) {
         return accessPolicyMapper.toModel(accessPolicyRepository
                 .findByAccessPointAttributes_Location(location)
-                .orElseThrow(() -> new EntityNotFoundException("The Access Policy with location : (" + location + ") does not exist")));
+                .orElseThrow(() -> new EntityNotFoundException("The Access Policy with location  (" + location + ") does not exist")));
     }
 
 
@@ -95,9 +100,7 @@ public class AccessPolicyService {
         }
     }
 
-    private void checkOccupancyLevel(AccessPolicyModel accessPolicyModel) {
-        AccessPointAttributesModel accessPointAttributesModel = accessPolicyExternalApiService.fetchAccessPoint(accessPolicyModel.getAccessPointAttributesModel()
-                .getLocation());
+    private void checkOccupancyLevel(AccessPolicyModel accessPolicyModel, AccessPointAttributesModel accessPointAttributesModel) {
         if(accessPolicyModel.getAccessPointAttributesModel().getOccupancyLevel() > accessPointAttributesModel.getOccupancyLevel()) {
             throw new ValidationException("The Occupancy Level Exceeds the maximum value");
         }
