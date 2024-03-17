@@ -10,7 +10,6 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class AccessPolicyModel {
 
     private String id;
