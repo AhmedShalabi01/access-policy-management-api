@@ -56,6 +56,7 @@ public class AccessPolicyService {
     }
 
     public void updateAccessPolicy(@Valid AccessPolicyModel accessPolicyModel, String accessPolicyId){
+        if(!accessPolicyId.equals(accessPolicyModel.getId())) throw new ValidationException("The Path ID and Request ID not matching");
         accessPolicyMapper.toModel(accessPolicyRepository
                 .findById(accessPolicyId)
                 .orElseThrow(() -> new EntityNotFoundException("The Access Policy with ID  (" + accessPolicyId + ") does not exist")));
