@@ -27,7 +27,7 @@ public class DuplicateKeyExceptionResponseBody {
     public DuplicateKeyExceptionResponseBody(HttpStatusCode status, DuplicateKeyException exception) {
         this.dateTime = LocalDateTime.now();
         this.status = status.value();
-        this.errorMessages = exception.getMessage();
+        this.errorMessages = "Location already exists";
     }
 
 }

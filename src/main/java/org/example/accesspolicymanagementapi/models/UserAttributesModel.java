@@ -12,12 +12,12 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 public class UserAttributesModel {
-    @NotBlank(message = "The department field Can not be blank")
+    @NotBlank(message = "The department field can not be blank")
     private String department;
     @NotEmpty(message = "The allowed roles can not be empty")
     private Set<String> allowedRoles;
-    @NotNull(message = "The minimum years of experience field Can not be blank")
-    @Min(value = 1,message = "The minimum years of experience field Can not be blank")
+    @NotNull(message = "The minimum years of experience field can not be blank")
+    @Min(value = 1,message = "The minimum years of experience field can not be blank")
     private Integer minimumYearsOfExperience;
     @NotEmpty(message = "The allowed clearance levels roles can not be empty")
     private Set<String> allowedClearanceLevels;
