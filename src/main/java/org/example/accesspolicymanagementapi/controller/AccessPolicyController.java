@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/access-polices")
+@RequestMapping("/access-policies")
 public class AccessPolicyController {
 
     private final AccessPolicyService accessPolicyService;
