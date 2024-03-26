@@ -21,7 +21,7 @@ public class AccessPolicyController {
         return new ResponseEntity<>(accessPolicyService.getAllAccessPolicies(), HttpStatus.OK);
     }
 
-    @GetMapping("/findAccessPolicy/{location}")
+    @GetMapping("/find/location/{location}")
     public ResponseEntity<AccessPolicyModel> getAccessPolicy(@PathVariable String location) {
         return new ResponseEntity<>(accessPolicyService.findAccessPolicy(location), HttpStatus.OK);
     }
