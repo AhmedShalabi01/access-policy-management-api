@@ -19,7 +19,7 @@ public class UserAttributesModel {
     @NotNull(message = "The minimum years of experience field can not be blank")
     @Min(value = 1,message = "The minimum years of experience field can not be blank")
     private Integer minimumYearsOfExperience;
-    @NotEmpty(message = "The allowed clearance levels roles can not be empty")
+    @NotEmpty(message = "The allowed clearance levels can not be empty")
     private Set<String> allowedClearanceLevels;
     @NotEmpty(message = "The allowed employment status can not be empty")
     private Set<String> allowedEmploymentStatus;
