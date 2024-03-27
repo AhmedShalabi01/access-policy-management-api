@@ -51,7 +51,7 @@ public class AccessPolicyService {
 
         checkDuplicateDepartments(accessPolicyModel.getUserAttributesSetModel());
         checkOccupancyLevel(accessPolicyModel,accessPointAttributesModel);
-        accessPolicyModel.setId(generateSequence(AccessPolicy.SEQUENCE_NAME));
+        accessPolicyModel.setId(generateSequence());
         accessPolicyRepository.insert(accessPolicyMapper.toDocument(accessPolicyModel));
     }
 
@@ -84,8 +84,8 @@ public class AccessPolicyService {
     }
 
 
-    private String generateSequence(String seqName) {
-        DatabaseSequence counter = mongoOperations.findAndModify(query(where("_id").is(seqName)),
+    private String generateSequence() {
+        DatabaseSequence counter = mongoOperations.findAndModify(query(where("_id").is(AccessPolicy.SEQUENCE_NAME)),
                 new Update().inc("seq",1), options().returnNew(true).upsert(true),
                 DatabaseSequence.class);
         return String.valueOf(!Objects.isNull(counter) ? counter.getSeq() : 1);
@@ -105,7 +105,6 @@ public class AccessPolicyService {
         if(accessPolicyModel.getAccessPointAttributesModel().getOccupancyLevel() > accessPointAttributesModel.getOccupancyLevel()) {
             throw new ValidationException("The Occupancy Level Exceeds the maximum value");
         }
-
     }
 
 

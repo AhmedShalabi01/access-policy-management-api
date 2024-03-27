@@ -18,14 +18,11 @@ public class AccessPolicyExternalApiService {
                 .build();
     }
 
-
     public AccessPointAttributesModel fetchAccessPoint(String location) {
         return webClient.get()
-                .uri("/findAccessPointAttributesByLocation/{location}", location)
+                .uri("/location/{location}", location)
                 .retrieve()
                 .bodyToMono(AccessPointAttributesModel.class)
                 .block();
     }
-
-
 }
