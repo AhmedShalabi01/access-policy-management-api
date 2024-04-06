@@ -8,11 +8,11 @@
 		<version>3.2.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>org.example</groupId>
+	<groupId>org.pacs</groupId>
 	<artifactId>access-policy-management-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>rule-management-api</name>
-	<description>rule-management-api</description>
+	<name>access-policy-management-api</name>
+	<description>access-policy-management-api</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
