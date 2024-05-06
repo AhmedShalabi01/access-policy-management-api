@@ -1,6 +1,6 @@
 package org.pacs.accesspolicymanagementapi.service;
 
-import org.pacs.accesspolicymanagementapi.models.AccessPointAttributesModel;
+import org.pacs.accesspolicymanagementapi.models.LiveAccessPointAttributesModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -18,11 +18,11 @@ public class AccessPolicyExternalApiService {
                 .build();
     }
 
-    public AccessPointAttributesModel fetchAccessPoint(String location) {
+    public LiveAccessPointAttributesModel fetchLiveAccessPoint(String location) {
         return webClient.get()
-                .uri("/location/{location}", location)
+                .uri("/find/location/{location}", location)
                 .retrieve()
-                .bodyToMono(AccessPointAttributesModel.class)
+                .bodyToMono(LiveAccessPointAttributesModel.class)
                 .block();
     }
 }

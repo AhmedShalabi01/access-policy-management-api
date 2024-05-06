@@ -11,12 +11,13 @@ import java.util.Set;
 @AllArgsConstructor
 public class AccessPolicyModel {
 
+    @JsonProperty("ID")
     private String id;
 
-    @JsonProperty("accessPointAttributes")
     @Valid
+    @JsonProperty("APA")
     private AccessPointAttributesModel accessPointAttributesModel;
-    @JsonProperty("userAttributesSet")
     @Valid
+    @JsonProperty("UAS")
     private Set<UserAttributesModel> userAttributesSetModel;
 }

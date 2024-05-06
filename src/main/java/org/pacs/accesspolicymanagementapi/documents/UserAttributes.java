@@ -12,7 +12,6 @@ public class UserAttributes {
     @Indexed
     private String department;
     private Set<String> allowedRoles;
-    private Integer minimumYearsOfExperience;
     private Set<String> allowedClearanceLevels;
     private Set<String> allowedEmploymentStatus;
 }

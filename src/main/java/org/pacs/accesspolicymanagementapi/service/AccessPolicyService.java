@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.pacs.accesspolicymanagementapi.documents.AccessPolicy;
 import org.pacs.accesspolicymanagementapi.documents.AccessPolicySequence;
 import org.pacs.accesspolicymanagementapi.mapper.AccessPolicyMapper;
-import org.pacs.accesspolicymanagementapi.models.AccessPointAttributesModel;
 import org.pacs.accesspolicymanagementapi.models.AccessPolicyModel;
+import org.pacs.accesspolicymanagementapi.models.LiveAccessPointAttributesModel;
 import org.pacs.accesspolicymanagementapi.models.UserAttributesModel;
 import org.pacs.accesspolicymanagementapi.repo.AccessPolicyRepository;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -44,13 +44,16 @@ public class AccessPolicyService {
                 .collect(Collectors.toList());
     }
 
-    public void createNewAccessPolicy(@Valid AccessPolicyModel accessPolicyModel){
+    public void createNewAccessPolicy(@Valid AccessPolicyModel accessPolicyModel) {
 
-        AccessPointAttributesModel accessPointAttributesModel = accessPolicyExternalApiService.fetchAccessPoint(accessPolicyModel.getAccessPointAttributesModel()
+        System.out.println(accessPolicyModel);
+
+        LiveAccessPointAttributesModel accessPointAttributesModel = accessPolicyExternalApiService.fetchLiveAccessPoint(
+                accessPolicyModel.getAccessPointAttributesModel()
                 .getLocation());
 
         checkDuplicateDepartments(accessPolicyModel.getUserAttributesSetModel());
-        checkOccupancyLevel(accessPolicyModel,accessPointAttributesModel);
+        checkMaxOccupancyLevel(accessPolicyModel,accessPointAttributesModel);
         accessPolicyModel.setId(generateSequence());
         accessPolicyRepository.insert(accessPolicyMapper.toDocument(accessPolicyModel));
     }
@@ -61,14 +64,15 @@ public class AccessPolicyService {
                 .findById(accessPolicyId)
                 .orElseThrow(() -> new EntityNotFoundException("The Access Policy with ID  (" + accessPolicyId + ") does not exist")));
 
-        AccessPointAttributesModel accessPointAttributesModel = accessPolicyExternalApiService.fetchAccessPoint(accessPolicyModel.getAccessPointAttributesModel()
+        LiveAccessPointAttributesModel accessPointAttributesModel = accessPolicyExternalApiService.fetchLiveAccessPoint(accessPolicyModel.getAccessPointAttributesModel()
                 .getLocation());
+
         checkDuplicateDepartments(accessPolicyModel.getUserAttributesSetModel());
-        checkOccupancyLevel(accessPolicyModel,accessPointAttributesModel);
-
+        checkMaxOccupancyLevel(accessPolicyModel, accessPointAttributesModel);
+        checkLiveOccupancyLevel(accessPolicyModel, accessPointAttributesModel);
         accessPolicyRepository.save(accessPolicyMapper.toDocument(accessPolicyModel));
-
     }
+
     public void deleteAccessPolicy(String accessPolicyId) {
         accessPolicyMapper.toModel(accessPolicyRepository
                 .findById(accessPolicyId)
@@ -100,11 +104,15 @@ public class AccessPolicyService {
         }
     }
 
-    private void checkOccupancyLevel(AccessPolicyModel accessPolicyModel, AccessPointAttributesModel accessPointAttributesModel) {
-        if(accessPolicyModel.getAccessPointAttributesModel().getOccupancyLevel() > accessPointAttributesModel.getOccupancyLevel()) {
+    private void checkMaxOccupancyLevel(AccessPolicyModel accessPolicyModel, LiveAccessPointAttributesModel liveAccessPointAttributesModel) {
+        if(accessPolicyModel.getAccessPointAttributesModel().getMaxOccupancyLevel() > liveAccessPointAttributesModel.getMaxOccupancyLevel()) {
             throw new ValidationException("The Occupancy Level Exceeds the maximum value");
         }
     }
 
-
+    private void checkLiveOccupancyLevel(AccessPolicyModel accessPolicyModel, LiveAccessPointAttributesModel LiveAccessPointAttributesModel) {
+        if(accessPolicyModel.getAccessPointAttributesModel().getMaxOccupancyLevel() < LiveAccessPointAttributesModel.getOccupancyLevel()) {
+            throw new ValidationException("Occupancy level limit exceeded");
+        }
+    }
 }
