@@ -27,21 +27,21 @@ public class AccessPolicyController {
     }
 
     @PostMapping(path = "/add")
-    public ResponseEntity<String> createNewAccessPolicy(@RequestBody AccessPolicyModel accessPolicyModel) {
+    public ResponseEntity<Void> createNewAccessPolicy(@RequestBody AccessPolicyModel accessPolicyModel) {
         accessPolicyService.createNewAccessPolicy(accessPolicyModel);
-        return new ResponseEntity<>("Access Policy Created", HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping(path = "/update/{id}")
-    public ResponseEntity<String> updateAccessPolicy(@RequestBody AccessPolicyModel userModel, @PathVariable String id) {
+    public ResponseEntity<Void> updateAccessPolicy(@RequestBody AccessPolicyModel userModel, @PathVariable String id) {
         accessPolicyService.updateAccessPolicy(userModel, id);
-        return new ResponseEntity<>("Access Policy Updated", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<String> deleteAccessPolicy(@PathVariable String id) {
+    public ResponseEntity<Void> deleteAccessPolicy(@PathVariable String id) {
         accessPolicyService.deleteAccessPolicy(id);
-        return new ResponseEntity<>("Access Policy Deleted", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 
