@@ -55,7 +55,7 @@ public class AccessPolicyService {
         checkDuplicateDepartments(accessPolicyModel.getUserAttributesSetModel());
         checkMaxOccupancyLevel(accessPolicyModel,accessPointAttributesModel);
         accessPolicyModel.setId(generateSequence());
-        accessPolicyRepository.insert(accessPolicyMapper.toDocument(accessPolicyModel));
+        accessPolicyRepository.save(accessPolicyMapper.toDocument(accessPolicyModel));
     }
 
     public void updateAccessPolicy(@Valid AccessPolicyModel accessPolicyModel, String accessPolicyId){
