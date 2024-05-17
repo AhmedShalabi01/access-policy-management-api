@@ -46,8 +46,6 @@ public class AccessPolicyService {
 
     public void createNewAccessPolicy(@Valid AccessPolicyModel accessPolicyModel) {
 
-        System.out.println(accessPolicyModel);
-
         LiveAccessPointAttributesModel accessPointAttributesModel = accessPolicyExternalApiService.fetchLiveAccessPoint(
                 accessPolicyModel.getAccessPointAttributesModel()
                 .getLocation());
