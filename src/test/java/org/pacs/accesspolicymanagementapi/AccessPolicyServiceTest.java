@@ -83,7 +83,7 @@ public class AccessPolicyServiceTest {
         accessPolicyService.createNewAccessPolicy(accessPolicyModel1);
 
         verify(accessPolicyExternalApiService).fetchLiveAccessPoint("C213");
-        verify(accessPolicyRepository).insert(any(AccessPolicy.class));
+        verify(accessPolicyRepository).save(any(AccessPolicy.class));
     }
 
     @Test
